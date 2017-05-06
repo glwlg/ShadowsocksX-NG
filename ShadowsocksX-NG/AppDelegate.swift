@@ -14,12 +14,17 @@ import RxSwift
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
     
+    // 二维码window
     var qrcodeWinCtrl: SWBQRCodeWindowController!
+    // 个人中心window
     var preferencesWinCtrl: PreferencesWindowController!
+    // 用户规则配置window
     var editUserRulesWinCtrl: UserRulesController!
+    // 综合配置Window
     var allInOnePreferencesWinCtrl: PreferencesWinController!
+    // 提示window
     var toastWindowCtrl: ToastWindowController!
-
+    
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var statusMenu: NSMenu!
     
@@ -56,11 +61,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         
         NSUserNotificationCenter.default.delegate = self
         
-        // Prepare ss-local
+        // 安装本地SS的命令和相关文件
         InstallSSLocal()
+        // 安装Kcptun的相关命令和相关文件
         InstallKcptunClient()
+        // 安装HTTP代理的相关命令和相关文件
         InstallPrivoxy()
-        // Prepare defaults
+        // 设置本地默认配置
         let defaults = UserDefaults.standard
         defaults.register(defaults: [
             "ShadowsocksOn": true,
@@ -82,15 +89,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             "Kcptun.Conn": NSNumber(value: 1),
             ])
         
+        // 创建菜单栏弹窗
         statusItem = NSStatusBar.system().statusItem(withLength: AppDelegate.StatusItemIconWidth)
         let image : NSImage = NSImage(named: "menu_icon")!
+        // 设置图标的遮罩效果
         image.isTemplate = true
         statusItem.image = image
         statusItem.menu = statusMenu
         
-        
+        // 创建消息中心，当窗口关闭的时候重新加载参数
         let notifyCenter = NotificationCenter.default
-        
         _ = notifyCenter.rx.notification(NOTIFY_CONF_CHANGED)
             .subscribe(onNext: { noti in
                 SyncSSLocal()
@@ -98,6 +106,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 self.updateCopyHttpProxyExportMenu()
             })
         
+        // 增加消息通知，当配置文件（当前连接的服务器相关信息）保存的时候重新加载
         notifyCenter.addObserver(forName: NOTIFY_SERVER_PROFILES_CHANGED, object: nil, queue: nil
             , using: {
                 (note) in
@@ -113,10 +122,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 SyncSSLocal()
             }
         )
+        
+        // 快捷键切换开启与关闭的时候出发通知
         _ = notifyCenter.rx.notification(NOTIFY_TOGGLE_RUNNING_SHORTCUT)
             .subscribe(onNext: { noti in
                 self.doToggleRunning(showToast: true)
             })
+        
+        // 快捷键切换开启的mode的时候触发
         _ = notifyCenter.rx.notification(NOTIFY_SWITCH_PROXY_MODE_SHORTCUT)
             .subscribe(onNext: { noti in
                 let mode = defaults.string(forKey: "ShadowsocksRunningMode")!
@@ -140,6 +153,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 self.makeToast(toastMessage)
             })
         
+        // 扫描获得二维码的产生的消息通知进行触发
         _ = notifyCenter.rx.notification(NOTIFY_FOUND_SS_URL)
             .subscribe(onNext: { noti in
                 self.handleFoundSSURL(noti)
@@ -150,11 +164,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             , andSelector: #selector(self.handleURLEvent)
             , forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
         
+        // 更新UI
         updateMainMenu()
         updateCopyHttpProxyExportMenu()
         updateServersMenu()
         updateRunningModeMenu()
         
+        // PAC的设置
         ProxyConfHelper.install()
         ProxyConfHelper.startMonitorPAC()
         applyConfig()

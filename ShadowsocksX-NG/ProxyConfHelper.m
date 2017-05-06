@@ -100,6 +100,7 @@ GCDWebServer *webServer =nil;
     }
 }
 
+//
 + (void)addArguments4ManualSpecifyNetworkServices:(NSMutableArray*) args {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
@@ -114,10 +115,12 @@ GCDWebServer *webServer =nil;
     }
 }
 
+// 获得 PAC 文件路径
 + (NSString*)getPACFilePath {
     return [NSString stringWithFormat:@"%@/%@", NSHomeDirectory(), @".ShadowsocksX-NG/gfwlist.js"];
 }
 
+// 开启 PAC 代理
 + (void)enablePACProxy {
     //start server here and then using the string next line
     //next two lines can open gcdwebserver and work around pac file
@@ -132,6 +135,7 @@ GCDWebServer *webServer =nil;
     [self callHelper:args];
 }
 
+// 开启全局代理
 + (void)enableGlobalProxy {
     NSUInteger port = [[NSUserDefaults standardUserDefaults]integerForKey:@"LocalSocks5.ListenPort"];
     
@@ -152,6 +156,7 @@ GCDWebServer *webServer =nil;
     [self stopPACServer];
 }
 
+//  关闭代理
 + (void)disableProxy {
     // 带上所有参数是为了判断是否原有代理设置是否由ssx-ng设置的。如果是用户手工设置的其他配置，则不进行清空。
     NSURL* url = [NSURL URLWithString: [self getHttpPACUrl]];
@@ -166,6 +171,7 @@ GCDWebServer *webServer =nil;
     [self stopPACServer];
 }
 
+// 请求本地开启的 Pac 端口,获得 Pac 配置文件内容。
 + (NSString*)getHttpPACUrl {
     NSString * routerPath = @"/proxy.pac";
     
@@ -177,6 +183,7 @@ GCDWebServer *webServer =nil;
     return [NSString stringWithFormat:@"%@%@:%d%@",@"http://",address,port,routerPath];
 }
 
+// 开启 PAC 服务
 + (void)startPACServer:(NSString*) PACFilePath {
     [self stopPACServer];
     
@@ -210,6 +217,7 @@ GCDWebServer *webServer =nil;
     }
 }
 
+// 开启PAC的监控，查看文件是否发生更改，若发生更改第一时间重启服务
 + (void)startMonitorPAC {
     NSString* PACFilePath = [self getPACFilePath];
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -219,6 +227,7 @@ GCDWebServer *webServer =nil;
                                                               queue);
     dispatch_source_set_event_handler(source, ^
                                       {
+                                          // 获得对应的文件资源
                                           unsigned long flags = dispatch_source_get_data(source);
                                           if(flags & DISPATCH_VNODE_DELETE)
                                           {

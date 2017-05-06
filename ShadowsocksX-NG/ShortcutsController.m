@@ -2,9 +2,6 @@
 //  ShortcutsController.m
 //  ShadowsocksX-NG
 //
-//  Created by 邱宇舟 on 2017/3/10.
-//  Copyright © 2017年 qiuyuzhou. All rights reserved.
-//
 
 #import "ShortcutsController.h"
 

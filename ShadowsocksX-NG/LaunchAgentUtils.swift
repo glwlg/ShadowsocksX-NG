@@ -2,8 +2,6 @@
 //  BGUtils.swift
 //  ShadowsocksX-NG
 //
-//  Created by 邱宇舟 on 16/6/6.
-//  Copyright © 2016年 qiuyuzhou. All rights reserved.
 //
 
 import Foundation
@@ -29,7 +27,7 @@ func getFileSHA1Sum(_ filepath: String) -> String {
 // Genarate the mac launch agent service plist
 
 //  MARK: sslocal
-
+// 设置输出的log文件和对应的本地参数
 func generateSSLocalLauchAgentPlist() -> Bool {
     let sslocalPath = NSHomeDirectory() + APP_SUPPORT_DIR + "ss-local-latest/ss-local"
     let logFilePath = NSHomeDirectory() + "/Library/Logs/ss-local.log"
@@ -75,6 +73,7 @@ func generateSSLocalLauchAgentPlist() -> Bool {
     }
 }
 
+// 调用start_ss_local.sh脚本来开启现有的服务
 func StartSSLocal() {
     let bundle = Bundle.main
     let installerPath = bundle.path(forResource: "start_ss_local.sh", ofType: nil)
@@ -87,6 +86,7 @@ func StartSSLocal() {
     }
 }
 
+// 调用stop_ss_local.sh脚本来关闭现有的服务。
 func StopSSLocal() {
     let bundle = Bundle.main
     let installerPath = bundle.path(forResource: "stop_ss_local.sh", ofType: nil)
@@ -99,6 +99,7 @@ func StopSSLocal() {
     }
 }
 
+// 执行安装脚本，将需要的文件复制到对应的文件目录下。
 func InstallSSLocal() {
     let fileMgr = FileManager.default
     let homeDir = NSHomeDirectory()
@@ -117,6 +118,7 @@ func InstallSSLocal() {
     }
 }
 
+// 将当前的服务器的相关参数写入到 json 文件中，并比较原有内容和现在的内容的区别。
 func writeSSLocalConfFile(_ conf:[String:AnyObject]) -> Bool {
     do {
         let filepath = NSHomeDirectory() + APP_SUPPORT_DIR + "ss-local-config.json"
@@ -137,6 +139,7 @@ func writeSSLocalConfFile(_ conf:[String:AnyObject]) -> Bool {
     return false
 }
 
+// 删除配置文件。
 func removeSSLocalConfFile() {
     do {
         let filepath = NSHomeDirectory() + APP_SUPPORT_DIR + "ss-local-config.json"
@@ -146,6 +149,7 @@ func removeSSLocalConfFile() {
     }
 }
 
+// 同步本地的服务器的设置
 func SyncSSLocal() {
     var changed: Bool = false
     changed = changed || generateSSLocalLauchAgentPlist()
@@ -155,6 +159,7 @@ func SyncSSLocal() {
             changed = changed || writeSSLocalConfFile((profile.toJsonConfig()))
         }
         
+        // 判断是否正在启动状态，如果是启动状态同时状态被更改，那么进行重启。
         let on = UserDefaults.standard.bool(forKey: "ShadowsocksOn")
         if on {
             if changed {
@@ -183,6 +188,7 @@ func SyncSSLocal() {
 // --------------------------------------------------------------------------------
 //  MARK: privoxy
 
+//
 func generatePrivoxyLauchAgentPlist() -> Bool {
     let privoxyPath = NSHomeDirectory() + APP_SUPPORT_DIR + "privoxy"
     let logFilePath = NSHomeDirectory() + "/Library/Logs/privoxy.log"
@@ -217,6 +223,7 @@ func generatePrivoxyLauchAgentPlist() -> Bool {
     }
 }
 
+// 开始HTTP代理
 func StartPrivoxy() {
     let bundle = Bundle.main
     let installerPath = bundle.path(forResource: "start_privoxy.sh", ofType: nil)
@@ -229,6 +236,7 @@ func StartPrivoxy() {
     }
 }
 
+// 停止HTTP代理
 func StopPrivoxy() {
     let bundle = Bundle.main
     let installerPath = bundle.path(forResource: "stop_privoxy.sh", ofType: nil)
@@ -241,6 +249,7 @@ func StopPrivoxy() {
     }
 }
 
+// 安装HTTP代理
 func InstallPrivoxy() {
     let fileMgr = FileManager.default
     let homeDir = NSHomeDirectory()
@@ -258,6 +267,7 @@ func InstallPrivoxy() {
     }
 }
 
+// 将对应的本地的监听相关参数写入本地文件夹中
 func writePrivoxyConfFile() -> Bool {
     do {
         let defaults = UserDefaults.standard
@@ -285,6 +295,7 @@ func writePrivoxyConfFile() -> Bool {
     return false
 }
 
+// 删除HTTP代理的本地文件
 func removePrivoxyConfFile() {
     do {
         let filepath = NSHomeDirectory() + APP_SUPPORT_DIR + "privoxy.config"
@@ -294,6 +305,7 @@ func removePrivoxyConfFile() {
     }
 }
 
+// 同步Privoxy的相关参数，如果代理是开启的状态，并且参数发生了更改的情况，那么重启。
 func SyncPrivoxy() {
     var changed: Bool = false
     changed = changed || generatePrivoxyLauchAgentPlist()
@@ -325,7 +337,7 @@ func SyncPrivoxy() {
 
 // --------------------------------------------------------------------------------
 // kcptun
-
+// 设置kcpTun的服务，并添加log文件用来记录日志文件
 func generateKcptunLauchAgentPlist() -> Bool {
     let sslocalPath = NSHomeDirectory() + APP_SUPPORT_DIR + "kcptun_client"
     let logFilePath = NSHomeDirectory() + "/Library/Logs/kcptun_client.log"
@@ -373,6 +385,7 @@ func generateKcptunLauchAgentPlist() -> Bool {
     }
 }
 
+// 安装kcptun服务 复制相关文件
 func InstallKcptunClient() {
     let fileMgr = FileManager.default
     let homeDir = NSHomeDirectory()
@@ -390,6 +403,7 @@ func InstallKcptunClient() {
     }
 }
 
+// 添加Kcptun配置文件。
 func writeKcptunConfFile(_ conf:[String:AnyObject]) -> Bool {
     do {
         let filepath = NSHomeDirectory() + APP_SUPPORT_DIR + "kcptun-config.json"
@@ -410,6 +424,7 @@ func writeKcptunConfFile(_ conf:[String:AnyObject]) -> Bool {
     return false
 }
 
+// 返回是否开启kcptun服务
 func isEnabledKcptun() -> Bool {
     let mgr = ServerProfileManager.instance
     if let profile = mgr.getActiveProfile() {
@@ -418,6 +433,7 @@ func isEnabledKcptun() -> Bool {
     return false
 }
 
+// 删除kcptun配置文件
 func removeKcptunConfFile() {
     do {
         let filepath = NSHomeDirectory() + APP_SUPPORT_DIR + "kcptun-config.json"
@@ -427,6 +443,7 @@ func removeKcptunConfFile() {
     }
 }
 
+// 开启kcptun文件
 func StartKcptun() {
     if isEnabledKcptun() {
         let bundle = Bundle.main
@@ -441,6 +458,7 @@ func StartKcptun() {
     }
 }
 
+// 停止kcptun文件
 func StopKcptun() {
     let bundle = Bundle.main
     let installerPath = bundle.path(forResource: "stop_kcptun.sh", ofType: nil)
@@ -453,6 +471,7 @@ func StopKcptun() {
     }
 }
 
+// 同步Kcptun相关参数，并重启服务。
 func SyncKcptun() {
     var changed: Bool = false
     changed = changed || generateKcptunLauchAgentPlist()
