@@ -2,8 +2,6 @@
 //  UserRulesController.swift
 //  ShadowsocksX-NG
 //
-//  Created by 周斌佳 on 16/8/1.
-//  Copyright © 2016年 qiuyuzhou. All rights reserved.
 //
 
 import Cocoa
@@ -12,6 +10,7 @@ class UserRulesController: NSWindowController {
 
     @IBOutlet var userRulesView: NSTextView!
 
+    // 加载已有的用户规则
     override func windowDidLoad() {
         super.windowDidLoad()
 
@@ -25,10 +24,12 @@ class UserRulesController: NSWindowController {
         userRulesView.string = str
     }
     
+    // 取消
     @IBAction func didCancel(_ sender: AnyObject) {
         window?.performClose(self)
     }
 
+    // 保存并写入文件
     @IBAction func didOK(_ sender: AnyObject) {
         if let str = userRulesView.string {
             do {

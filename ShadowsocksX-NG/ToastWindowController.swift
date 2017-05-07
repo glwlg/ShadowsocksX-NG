@@ -2,8 +2,6 @@
 //  ToastWindowController.swift
 //  ShadowsocksX-NG
 //
-//  Created by 邱宇舟 on 2017/3/20.
-//  Copyright © 2017年 qiuyuzhou. All rights reserved.
 //
 
 import Cocoa

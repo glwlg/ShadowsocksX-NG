@@ -170,12 +170,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         updateServersMenu()
         updateRunningModeMenu()
         
-        // PAC的设置
+        // PAC助手设置，方便对参数进行设置。
         ProxyConfHelper.install()
         ProxyConfHelper.startMonitorPAC()
         applyConfig()
 
-        // Register global hotkey
+        // 注册热键
         ShortcutsController.bindShortcuts()
     }
     
@@ -207,7 +207,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
 
-    // MARK: - UI Methods
+    // 用来快速设置开启与关闭的热键
     @IBAction func toggleRunning(_ sender: NSMenuItem) {
         self.doToggleRunning(showToast: false)
     }
@@ -231,10 +231,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    // 更新PAC List
     @IBAction func updateGFWList(_ sender: NSMenuItem) {
         UpdatePACFromGFWList()
     }
     
+    // 打开用户手动设置规则界面
     @IBAction func editUserRulesForPAC(_ sender: NSMenuItem) {
         if editUserRulesWinCtrl != nil {
             editUserRulesWinCtrl.close()
@@ -564,13 +566,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     
     //------------------------------------------------------------
     // NSUserNotificationCenterDelegate
-    
+    // 用户推送
     func userNotificationCenter(_ center: NSUserNotificationCenter
         , shouldPresent notification: NSUserNotification) -> Bool {
         return true
     }
     
     
+    // 在点击快捷键之后，弹框提示
     func makeToast(_ message: String) {
         if toastWindowCtrl != nil {
             toastWindowCtrl.close()

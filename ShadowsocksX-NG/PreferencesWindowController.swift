@@ -2,8 +2,6 @@
 //  PreferencesWindowController.swift
 //  ShadowsocksX-NG
 //
-//  Created by 邱宇舟 on 16/6/6.
-//  Copyright © 2016年 qiuyuzhou. All rights reserved.
 //
 
 import Cocoa
@@ -109,6 +107,7 @@ class PreferencesWindowController: NSWindowController
         profilesTableView.register(forDraggedTypes: [tableViewDragType])
     }
     
+    // 增加远端服务器按钮
     @IBAction func addProfile(_ sender: NSButton) {
         if editingProfile != nil && !editingProfile.isValid(){
             shakeWindows()
@@ -128,6 +127,7 @@ class PreferencesWindowController: NSWindowController
         updateProfileBoxVisible()
     }
     
+    // 删除对应配置
     @IBAction func removeProfile(_ sender: NSButton) {
         let index = profilesTableView.selectedRow
         if index >= 0 {
@@ -139,6 +139,7 @@ class PreferencesWindowController: NSWindowController
         updateProfileBoxVisible()
     }
     
+    // 点击OK，保存现有的所有配置，并发送通知
     @IBAction func ok(_ sender: NSButton) {
         if editingProfile != nil {
             if !editingProfile.isValid() {
@@ -155,10 +156,12 @@ class PreferencesWindowController: NSWindowController
             .post(name: NOTIFY_SERVER_PROFILES_CHANGED, object: nil)
     }
     
+    // 取消
     @IBAction func cancel(_ sender: NSButton) {
         window?.performClose(self)
     }
     
+    // 右键复制一份配置信息
     @IBAction func duplicate(_ sender: Any) {
         let profile = profileMgr.profiles[profilesTableView.clickedRow]
         let duplicateProfile = profile.copy() as! ServerProfile
@@ -173,6 +176,7 @@ class PreferencesWindowController: NSWindowController
         updateProfileBoxVisible()
     }
     
+    // 将当前的配置信息保存到粘贴板，（已弃用
     @IBAction func copyCurrentProfileURL2Pasteboard(_ sender: NSButton) {
         let index = profilesTableView.selectedRow
         if  index >= 0 {

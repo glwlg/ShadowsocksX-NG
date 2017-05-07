@@ -15,6 +15,7 @@
 
 GCDWebServer *webServer =nil;
 
+// 根据帮助来判断对应的版本是否正确。
 + (BOOL)isVersionOk {
     NSTask *task;
     task = [[NSTask alloc] init];
@@ -45,6 +46,7 @@ GCDWebServer *webServer =nil;
     return YES;
 }
 
+// 安装代理配置助手
 + (void)install {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:kShadowsocksHelper] || ![self isVersionOk]) {
@@ -61,6 +63,7 @@ GCDWebServer *webServer =nil;
     }
 }
 
+// 调用对应的 helper 脚本
 + (void)callHelper:(NSArray*) arguments {
     NSTask *task;
     task = [[NSTask alloc] init];
@@ -100,7 +103,7 @@ GCDWebServer *webServer =nil;
     }
 }
 
-//
+// 同时代理多个网络环境
 + (void)addArguments4ManualSpecifyNetworkServices:(NSMutableArray*) args {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     

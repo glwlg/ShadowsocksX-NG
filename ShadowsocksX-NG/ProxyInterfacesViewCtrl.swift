@@ -26,6 +26,7 @@ class ProxyInterfacesViewCtrl: NSViewController, NSTableViewDataSource, NSTableV
             selectedNetworkServices = NSMutableSet()
         }
         
+        // 获得系统中的网络列表
         networkServices = ProxyConfTool.networkServicesList() as NSArray!
         tableView.reloadData()
     }

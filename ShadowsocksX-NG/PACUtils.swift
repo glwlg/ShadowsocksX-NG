@@ -17,7 +17,7 @@ let PACFilePath = PACRulesDirPath + "gfwlist.js"
 let GFWListFilePath = PACRulesDirPath + "gfwlist.txt"
 
 
-// Because of LocalSocks5.ListenPort may be changed
+// 同步Pac配置，因为pac端口可能发生改变
 func SyncPac() {
     var needGenerate = false
     
@@ -40,7 +40,7 @@ func SyncPac() {
     }
 }
 
-
+// 解析PAC文件
 func GeneratePACFile() -> Bool {
     let fileMgr = FileManager.default
     // Maker the dir if rulesDirPath is not exesited.
@@ -53,13 +53,13 @@ func GeneratePACFile() -> Bool {
         }
     }
     
-    // If gfwlist.txt is not exsited, copy from bundle
+    // 如果GFWList不存在，就从bundle中拷贝一份
     if !fileMgr.fileExists(atPath: GFWListFilePath) {
         let src = Bundle.main.path(forResource: "gfwlist", ofType: "txt")
         try! fileMgr.copyItem(atPath: src!, toPath: GFWListFilePath)
     }
     
-    // If user-rule.txt is not exsited, copy from bundle
+    // 如果PAC不存在，就从bundle中拷贝一份
     if !fileMgr.fileExists(atPath: PACUserRuleFilePath) {
         let src = Bundle.main.path(forResource: "user-rule", ofType: "txt")
         try! fileMgr.copyItem(atPath: src!, toPath: PACUserRuleFilePath)
@@ -67,8 +67,10 @@ func GeneratePACFile() -> Bool {
     
     let socks5Port = UserDefaults.standard.integer(forKey: "LocalSocks5.ListenPort")
     
+    // 对内容进行解析
     do {
         let gfwlist = try String(contentsOfFile: GFWListFilePath, encoding: String.Encoding.utf8)
+        // 去混淆
         if let data = Data(base64Encoded: gfwlist, options: .ignoreUnknownCharacters) {
             let str = String(data: data, encoding: String.Encoding.utf8)
             var lines = str!.components(separatedBy: CharacterSet.newlines)
@@ -82,7 +84,7 @@ func GeneratePACFile() -> Bool {
                 NSLog("Not found user-rule.txt")
             }
             
-            // Filter empty and comment lines
+            // 初步解析对应的规则内容
             lines = lines.filter({ (s: String) -> Bool in
                 if s.isEmpty {
                     return false
@@ -128,6 +130,7 @@ func GeneratePACFile() -> Bool {
     return false
 }
 
+// 更新pac列表
 func UpdatePACFromGFWList() {
     // Make the dir if rulesDirPath is not exesited.
     if !FileManager.default.fileExists(atPath: PACRulesDirPath) {

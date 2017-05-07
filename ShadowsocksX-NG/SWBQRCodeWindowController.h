@@ -2,8 +2,6 @@
 //  QRCodeWindowController.h
 //  shadowsocks
 //
-//  Created by clowwindy on 10/12/14.
-//  Copyright (c) 2014 clowwindy. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
