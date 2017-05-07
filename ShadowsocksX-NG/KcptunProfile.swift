@@ -2,13 +2,11 @@
 //  KcptunProfile.swift
 //  ShadowsocksX-NG
 //
-//  Created by 邱宇舟 on 2017/1/11.
-//  Copyright © 2017年 qiuyuzhou. All rights reserved.
 //
 
 import Foundation
 
-
+// 生成对应的Kcptun的相关内容
 class KcptunProfile: NSObject, NSCopying {
     
     var mode: String = "fast"

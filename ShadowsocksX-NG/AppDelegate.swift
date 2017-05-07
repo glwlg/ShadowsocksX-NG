@@ -2,8 +2,6 @@
 //  AppDelegate.swift
 //  ShadowsocksX-NG
 //
-//  Created by 邱宇舟 on 16/6/5.
-//  Copyright © 2016年 qiuyuzhou. All rights reserved.
 //
 
 import Cocoa
@@ -55,6 +53,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     var statusItem: NSStatusItem!
     static let StatusItemIconWidth:CGFloat = 20
     
+    // 完成加载
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
         _ = LaunchAtLoginController()// Ensure set when launch
@@ -180,13 +179,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
     }
     
     func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+        // app crash 或突然中断的时候
         StopSSLocal()
         StopKcptun()
         StopPrivoxy()
         ProxyConfHelper.disableProxy()
     }
-
+    
+    // 参数配置
     func applyConfig() {
         SyncSSLocal()
         
@@ -212,6 +212,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         self.doToggleRunning(showToast: false)
     }
     
+    // 切换开关
     func doToggleRunning(showToast: Bool) {
         let defaults = UserDefaults.standard
         var isOn = UserDefaults.standard.bool(forKey: "ShadowsocksOn")
@@ -249,6 +250,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         ctrl.window?.makeKeyAndOrderFront(self)
     }
     
+    // 显示二维码
     @IBAction func showQRCodeForCurrentServer(_ sender: NSMenuItem) {
         var errMsg: String?
         if let profile = ServerProfileManager.instance.getActiveProfile() {
@@ -276,6 +278,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    // 扫描屏幕上的内容
     @IBAction func scanQRCodeFromScreen(_ sender: NSMenuItem) {
         ScanQRCodeOnScreen()
     }
@@ -519,7 +522,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         }
     }
     
+    // 根据通知存储对应的服务器的相关信息
     func handleFoundSSURL(_ note: Notification) {
+        
+        // 获得消息体
         let sendNotify = {
             (title: String, subtitle: String, infoText: String) in
             
@@ -533,6 +539,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
                 .deliver(userNote);
         }
         
+        // 解析内部消息
         if let userInfo = (note as NSNotification).userInfo {
             let urls: [URL] = userInfo["urls"] as! [URL]
             
@@ -540,6 +547,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
             var isChanged = false
             
             for url in urls {
+                // 通过base64解码
                 if let profile = ServerProfile(url: url) {
                     mgr.profiles.append(profile)
                     isChanged = true
