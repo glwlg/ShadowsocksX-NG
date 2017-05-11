@@ -36,7 +36,7 @@
 "R6A-96-Zcb.title" = "显示当前服务器的二维码...";
 
 /* Class = "NSMenuItem"; title = "从 GFW List 更新PAC"; ObjectID = "TFc-Ec-duM"; */
-"TFc-Ec-duM.title" = "从 GFW List 更新PAC";
+"TFc-Ec-duM.title" = "使用远端 List 更新PAC";
 
 /* Class = "NSMenuItem"; title = "反馈"; ObjectID = "W7u-7g-Gv4"; */
 "W7u-7g-Gv4.title" = "反馈";

@@ -150,7 +150,7 @@ func UpdatePACFromGFWList() {
                         if GeneratePACFile() {
                             // Popup a user notification
                             let notification = NSUserNotification()
-                            notification.title = "PAC has been updated by latest GFW List.".localized
+                            notification.title = "PAC has been updated by List.".localized
                             NSUserNotificationCenter.default
                                 .deliver(notification)
                         }
@@ -161,7 +161,7 @@ func UpdatePACFromGFWList() {
             } else {
                 // Popup a user notification
                 let notification = NSUserNotification()
-                notification.title = "Failed to download latest GFW List.".localized
+                notification.title = "Failed to download List.".localized
                 NSUserNotificationCenter.default
                     .deliver(notification)
             }

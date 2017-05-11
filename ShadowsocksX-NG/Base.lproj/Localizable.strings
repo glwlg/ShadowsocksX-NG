@@ -6,9 +6,9 @@
  * ./PACUtils.swift
  */
 
-"PAC has been updated by latest GFW List." = "PAC has been updated by latest GFW List.";
+"PAC has been updated by latest GFW List." = "PAC has been updated by latest List.";
 
-"Failed to download latest GFW List." = "Failed to download latest GFW List.";
+"Failed to download latest GFW List." = "Failed to download latest List.";
 
 /*
  * ./PreferencesWindowController.swift

@@ -2,10 +2,6 @@
 //  main.m
 //  shadowsocks_sysconf
 //
-//  Created by clowwindy on 14-3-15.
-//  Copyright (c) 2014年 clowwindy. All rights reserved.
-//
-// Changed by QiuYuzhou
 
 
 #import <Foundation/Foundation.h>
@@ -16,7 +12,7 @@
 // https://github.com/stephencelis/BRLOptionParser
 #import <BRLOptionParser/BRLOptionParser.h>
 
-
+// cli工具
 int main(int argc, const char * argv[])
 {
     NSString* mode;

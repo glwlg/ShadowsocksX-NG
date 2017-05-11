@@ -120,7 +120,7 @@
 "t0I-6n-gnu.title" = "Which network interfaces  proxy setting would be controlled by ShadowsocksX-NG";
 
 /* Class = "NSTextFieldCell"; title = "GFW List URL:"; ObjectID = "v7a-wf-aEm"; */
-"v7a-wf-aEm.title" = "GFW List URL:";
+"v7a-wf-aEm.title" = "Remote List URL:";
 
 /* Class = "NSButtonCell"; title = "Show Running Proxy Mode In Status Bar"; ObjectID = "wXO-Qz-yDg"; */
 "wXO-Qz-yDg.title" = "在状态栏显示当前代理模式";
